@@ -1,14 +1,27 @@
 package dev.joaov.meubolso.model.domain;
 
 public class Usuario {
-    public String nome;
-    public String email;
-    public double saldo;
-    public double totalReceitas;
-    public double totalDespesas;
+    private String nome;
+    private String email;
+    private Financas financas;
 
-    private double calcularSaldo() {
-        return totalReceitas - totalDespesas;
+    public Usuario() {
+        this.financas = new Financas();
+    }
+
+    public Usuario(String nome) {
+        this();
+        this.nome = nome;
+    }
+
+    public Usuario(String nome, String email) {
+        this(nome);
+        this.email = email;
+    }
+
+    public Usuario(String nome, String email, Financas financas) {
+        this(nome, email);
+        this.financas = financas;
     }
 
     public void mostrarInformacoes() {
@@ -17,20 +30,43 @@ public class Usuario {
             System.out.println();
             return;
         }
-        saldo = calcularSaldo();
+        double saldo = financas.getSaldo();
+        double totalReceitas = financas.getTotalReceitas();
+        double totalDespesas = financas.getTotalDespesas();
         System.out.printf("%nBem Vindo ao seu Dashboard, %s%nEmail Cadastrado: %s%nTotal de Receitas: %.2f%nTotal de Despesas: %.2f%nSaldo: %.2f%n", nome, email, totalReceitas, totalDespesas, saldo);
         System.out.println();
     }
 
-    public void adicionarReceita(double valor) {
-        totalReceitas += valor;
-    }
-
-    public void adicionarDespesa(double valor) {
-        totalDespesas += valor;
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", financas=" + financas +
+                '}';
     }
 
     public boolean estaCadastrado() {
         return nome != null && email != null;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Financas getFinancas() {
+        return financas;
     }
 }
