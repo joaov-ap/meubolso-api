@@ -5,6 +5,8 @@ import dev.joaov.meubolso.model.domain.Usuario;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -23,7 +25,9 @@ public class MeuBolsoApplication {
                 2 - Adicionar receita
                 3 - Adicionar despesa
                 4 - Verificar saldo
-                5 - Resumo
+                5 - Informações Completas
+                6 - Informações Resumida
+                7 - Ativar notificações
                 0 - Sair
                 """);
             } else {
@@ -31,7 +35,9 @@ public class MeuBolsoApplication {
                 1 - Adicionar receita
                 2 - Adicionar despesa
                 3 - Verificar saldo
-                4 - Resumo
+                4 - Informações Completas
+                5 - Informações Resumida
+                6 - Ativar notificações
                 0 - Sair
                 """);
 
@@ -99,8 +105,17 @@ public class MeuBolsoApplication {
                 case 5:
                     usuario.mostrarInformacoes();
                     break;
+                case 6:
+                    boolean ativarModoResumido = true;
+                    usuario.mostrarInformacoes(ativarModoResumido);
+                    break;
+                case 7:
+                    usuario.ativarNotificacao();
+                    System.out.println("Notificações ativadas.");
+                    System.out.println();
+                    break;
                 default:
-                    System.out.println("Opção invalida. Escolha um valor entre 0 e 5.");
+                    System.out.println("Opção invalida. Escolha um valor entre 0 e 6.");
             }
         } while (inputUsuario != 0);
         scanner.close();
@@ -108,19 +123,27 @@ public class MeuBolsoApplication {
         Financas financasUsuario1 = new Financas(1200, 5000, 3800);
         Usuario usuario1 = new Usuario("Joao", "joao@email.com", financasUsuario1);
 
-        Financas financasUsuario2 = new Financas(1300);
+        Financas financasUsuario2 = new Financas(780);
         Usuario usuario2 = new Usuario("Vitor");
 
-        Financas financasUsuario3 = new Financas(1300, 1300);
+        Financas financasUsuario3 = new Financas(700, 700);
         Usuario usuario3 = new Usuario("Igor", "igor@email.com");
 
-        System.out.println(financasUsuario1);
-        System.out.println(usuario1);
-        System.out.println();
-        System.out.println(financasUsuario2);
-        System.out.println(usuario2);
-        System.out.println();
-        System.out.println(financasUsuario3);
-        System.out.println(usuario3);
+        usuario2.setFinancas(financasUsuario2);
+        usuario3.setFinancas(financasUsuario3);
+
+        List<Usuario> usuarios = new ArrayList<>();
+
+        usuarios.add(usuario1);
+        usuarios.add(usuario2);
+        usuarios.add(usuario3);
+
+        for (Usuario u : usuarios) {
+            if (u.getFinancas().getSaldo() < 800) {
+                continue;
+            }
+            System.out.println(u);
+        }
+
     }
 }

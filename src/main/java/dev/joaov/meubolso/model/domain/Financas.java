@@ -6,8 +6,10 @@ public class Financas {
     private double saldo;
     private double totalReceitas;
     private double totalDespesas;
+    private int pontuacaoScore;
 
     public Financas() {
+        this.pontuacaoScore = 1000;
     }
 
     public Financas(double saldo) {
@@ -24,8 +26,9 @@ public class Financas {
         this.totalDespesas = totalDespesas;
     }
 
-    private double calcularSaldo() {
-        return totalReceitas - totalDespesas;
+    public Financas(double saldo, double totalReceitas, double totalDespesas, int pontuacaoScore) {
+        this(saldo, totalReceitas, totalDespesas);
+        this.pontuacaoScore = pontuacaoScore;
     }
 
     public void adicionarReceita(double valor) {
@@ -36,6 +39,21 @@ public class Financas {
     public void adicionarDespesa(double valor) {
         escolherTipoDespesa();
         totalDespesas += valor;
+    }
+
+    private double calcularSaldo() {
+        return totalReceitas - totalDespesas;
+    }
+
+    private void calcularScore() {
+        if (saldo < 0) {
+            this.pontuacaoScore -= saldo * 0.7;
+        } else {
+            this.pontuacaoScore += saldo * 1.2;
+            if (this.pontuacaoScore > 1000) {
+                this.pontuacaoScore = 1000;
+            }
+        }
     }
 
     @Override
@@ -66,6 +84,11 @@ public class Financas {
 
     public void setTotalDespesas(double totalDespesas) {
         this.totalDespesas = totalDespesas;
+    }
+
+    public int getPontuacaoScore() {
+        calcularScore();
+        return pontuacaoScore;
     }
 
     private TipoReceita escolherTipoReceita() {
