@@ -3,6 +3,9 @@ package dev.joaov.meubolso.model.domain;
 import java.util.Scanner;
 
 public class Financas {
+    private final double PORCENTAGEM_TAXA_SCORE = 0.7;
+    private final double ACRESCIMO_SCORE = 1.2;
+
     private double saldo;
     private double totalReceitas;
     private double totalDespesas;
@@ -47,12 +50,15 @@ public class Financas {
 
     private void calcularScore() {
         if (saldo < 0) {
-            this.pontuacaoScore -= saldo * 0.7;
+            this.pontuacaoScore = this.pontuacaoScore - (int) (Math.abs(saldo) * PORCENTAGEM_TAXA_SCORE);
         } else {
-            this.pontuacaoScore += saldo * 1.2;
-            if (this.pontuacaoScore > 1000) {
-                this.pontuacaoScore = 1000;
-            }
+            this.pontuacaoScore = this.pontuacaoScore + (int) (saldo * ACRESCIMO_SCORE);
+        }
+
+        if (this.pontuacaoScore > 1000) {
+            this.pontuacaoScore = 1000;
+        } else if (this.pontuacaoScore < 0) {
+            this.pontuacaoScore = 0;
         }
     }
 
